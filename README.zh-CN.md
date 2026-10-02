@@ -2,6 +2,15 @@
 
 把券商研报 / 论文 / 业绩公告等 PDF，交给 AI 分析后转成**可交互的 HTML 阅读视图**：自动抽取正文与数据表格、把关键数据生成可交互图表（ECharts），同时**保留原 PDF 逐页阅读**，图表可一键定位回原文页。前后端分离、纯本机运行、数据不出本机。
 
+[![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/)
+[![Node.js](https://img.shields.io/badge/Node.js-18%2B-339933?logo=nodedotjs&logoColor=white)](https://nodejs.org/)
+[![React](https://img.shields.io/badge/React-18-61DAFB?logo=react&logoColor=black)](https://react.dev/)
+[![Vite](https://img.shields.io/badge/Vite-5-646CFF?logo=vite&logoColor=white)](https://vitejs.dev/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.110%2B-009688?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
+[![SQLite](https://img.shields.io/badge/SQLite-3-003B57?logo=sqlite&logoColor=white)](https://sqlite.org/)
+[![PyMuPDF](https://img.shields.io/badge/PyMuPDF-1.24%2B-2E7D32?logo=adobeacrobatreader&logoColor=white)](https://pymupdf.readthedocs.io/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
 > English README: [README.md](README.md)
 
 ## 核心能力

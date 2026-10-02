@@ -2,6 +2,15 @@
 
 Turn sell-side research reports, papers, and earnings releases (PDF) into an **interactive HTML reading view**. It extracts text and data tables, converts key numbers into interactive charts (ECharts), and keeps the **original PDF readable page by page** — charts can jump back to their source page. Front-end/back-end separated, fully local-first, your data never leaves your machine.
 
+[![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/)
+[![Node.js](https://img.shields.io/badge/Node.js-18%2B-339933?logo=nodedotjs&logoColor=white)](https://nodejs.org/)
+[![React](https://img.shields.io/badge/React-18-61DAFB?logo=react&logoColor=black)](https://react.dev/)
+[![Vite](https://img.shields.io/badge/Vite-5-646CFF?logo=vite&logoColor=white)](https://vitejs.dev/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.110%2B-009688?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
+[![SQLite](https://img.shields.io/badge/SQLite-3-003B57?logo=sqlite&logoColor=white)](https://sqlite.org/)
+[![PyMuPDF](https://img.shields.io/badge/PyMuPDF-1.24%2B-2E7D32?logo=adobeacrobatreader&logoColor=white)](https://pymupdf.readthedocs.io/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
 > 中文说明: [README.zh-CN.md](README.zh-CN.md)
 
 ## Highlights
