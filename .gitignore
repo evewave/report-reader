@@ -1,0 +1,27 @@
+# ---- Python ----
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+
+# ---- 后端本地数据与密钥（绝不提交）----
+backend/data/
+backend/.env
+
+# ---- 前端 ----
+frontend/node_modules/
+frontend/dist/
+frontend/.env
+frontend/.env.local
+frontend/.vite/
+
+# ---- 测试样例（含第三方 PDF / 大体积 HTML）----
+samples/
+
+# ---- 日志与杂项 ----
+*.log
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

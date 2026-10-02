@@ -1,0 +1,6 @@
+# report-reader 后端依赖（本机已装大部分，此清单用于全新环境复现）
+fastapi>=0.110
+uvicorn[standard]>=0.29
+python-multipart>=0.0.9
+openai>=1.30
+PyMuPDF>=1.24
