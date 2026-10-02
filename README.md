@@ -156,4 +156,4 @@ Click **📤 Export HTML** in the "AI Reading" header to generate a **single sel
 
 ## License
 
-Not specified — all rights reserved by default. Add a LICENSE file if you intend to open-source it.
+MIT — see [LICENSE](LICENSE).

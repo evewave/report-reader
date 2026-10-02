@@ -156,4 +156,4 @@ skills/my-skill/
 
 ## License
 
-未指定，默认保留所有权利；如需开源请自行补充 License 文件。
+MIT，详见 [LICENSE](LICENSE)。
