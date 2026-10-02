@@ -2,7 +2,7 @@
 
 Turn sell-side research reports, papers, and earnings releases (PDF) into an **interactive HTML reading view**. It extracts text and data tables, converts key numbers into interactive charts (ECharts), and keeps the **original PDF readable page by page** — charts can jump back to their source page. Front-end/back-end separated, fully local-first, your data never leaves your machine.
 
-[![Release](https://img.shields.io/github/v/tag/evewave/report-reader?label=release&sort=semver)](https://github.com/evewave/report-reader/releases)
+[![Release](https://img.shields.io/github/v/release/evewave/report-reader?label=release)](https://github.com/evewave/report-reader/releases)
 [![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/)
 [![Node.js](https://img.shields.io/badge/Node.js-18%2B-339933?logo=nodedotjs&logoColor=white)](https://nodejs.org/)
 [![React](https://img.shields.io/badge/React-18-61DAFB?logo=react&logoColor=black)](https://react.dev/)

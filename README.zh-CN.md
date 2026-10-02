@@ -2,7 +2,7 @@
 
 把券商研报 / 论文 / 业绩公告等 PDF，交给 AI 分析后转成**可交互的 HTML 阅读视图**：自动抽取正文与数据表格、把关键数据生成可交互图表（ECharts），同时**保留原 PDF 逐页阅读**，图表可一键定位回原文页。前后端分离、纯本机运行、数据不出本机。
 
-[![Release](https://img.shields.io/github/v/tag/evewave/report-reader?label=release&sort=semver)](https://github.com/evewave/report-reader/releases)
+[![Release](https://img.shields.io/github/v/release/evewave/report-reader?label=release)](https://github.com/evewave/report-reader/releases)
 [![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/)
 [![Node.js](https://img.shields.io/badge/Node.js-18%2B-339933?logo=nodedotjs&logoColor=white)](https://nodejs.org/)
 [![React](https://img.shields.io/badge/React-18-61DAFB?logo=react&logoColor=black)](https://react.dev/)
