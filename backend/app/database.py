@@ -42,6 +42,13 @@ CREATE TABLE IF NOT EXISTS skill_state (
     updated_at  TEXT NOT NULL DEFAULT (datetime('now','localtime'))
 );
 
+CREATE TABLE IF NOT EXISTS annotations (
+    doc_id      TEXT PRIMARY KEY,
+    items_json  TEXT NOT NULL DEFAULT '[]',
+    updated_at  TEXT NOT NULL DEFAULT (datetime('now','localtime')),
+    FOREIGN KEY (doc_id) REFERENCES documents(id) ON DELETE CASCADE
+);
+
 CREATE INDEX IF NOT EXISTS idx_analyses_doc ON analyses(doc_id);
 """
 

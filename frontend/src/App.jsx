@@ -26,6 +26,9 @@ export default function App() {
   const [sidebarOpen, setSidebarOpen] = useState(() => {
     try { return localStorage.getItem("rr-sidebar") !== "0"; } catch (_) { return true; }
   });
+  const [topbarHidden, setTopbarHidden] = useState(() => {
+    try { return localStorage.getItem("rr-topbar") === "0"; } catch (_) { return false; }
+  });
 
   const [skillId, setSkillId] = useState("");
   const [useVision, setUseVision] = useState(false);
@@ -58,12 +61,17 @@ export default function App() {
     try { localStorage.setItem("rr-sidebar", sidebarOpen ? "1" : "0"); } catch (_) { /* ignore */ }
   }, [sidebarOpen]);
 
+  useEffect(() => {
+    try { localStorage.setItem("rr-topbar", topbarHidden ? "0" : "1"); } catch (_) { /* ignore */ }
+  }, [topbarHidden]);
+
   const [peeking, setPeeking] = useState(false);
   const [focusMode, setFocusMode] = useState(false);
+  const [headerPeek, setHeaderPeek] = useState(false);
   const focusBefore = useRef(true);
 
-  const enterFocus = () => { focusBefore.current = sidebarOpen; setSidebarOpen(false); setFocusMode(true); };
-  const exitFocus = () => { setFocusMode(false); setSidebarOpen(focusBefore.current); };
+  const enterFocus = () => { focusBefore.current = sidebarOpen; setSidebarOpen(false); setHeaderPeek(false); setFocusMode(true); };
+  const exitFocus = () => { setFocusMode(false); setHeaderPeek(false); setSidebarOpen(focusBefore.current); };
   const toggleFocus = () => (focusMode ? exitFocus() : enterFocus());
 
   useEffect(() => {
@@ -155,33 +163,42 @@ export default function App() {
 
   return (
     <div className="app">
-      <div className={"topbar" + (focusMode ? " focus" : "")}>
-        <button className="btn icon" onClick={() => setSidebarOpen((v) => !v)} title={sidebarOpen ? "收起资料库侧栏" : "展开资料库侧栏"}>
-          {sidebarOpen ? "«" : "»"}
-        </button>
-        <div className="brand">
-          <span className="logo">◈</span>
-          研报 AI 阅读助手<span className="sub">上传 PDF → AI 解析 → 可交互图表阅读</span>
-        </div>
-        <div className="spacer" />
-        {!focusMode && (
-          <button className={"chip " + (ai.configured ? "ok" : "warn")} onClick={() => setShowSettings(true)} title="点击配置 AI 接口">
-            <span className="dot" />
-            {ai.configured ? `AI 就绪 · ${ai.model}` : "未配置 · 点我设置"}
-          </button>
-        )}
-        <button className="btn icon" onClick={() => setTheme((t) => (t === "dark" ? "light" : "dark"))} title="切换深浅色">
-          {theme === "dark" ? "☀️" : "🌙"}
-        </button>
-        {!focusMode && (
+      {(topbarHidden || focusMode) && <div className="top-hover" onMouseEnter={() => setHeaderPeek(true)} />}
+      <div
+        className={"topbar" + ((topbarHidden || focusMode) ? " collapsed" : "") + (headerPeek ? " peek" : "")}
+        onMouseLeave={() => { if (topbarHidden || focusMode) setHeaderPeek(false); }}
+      >
+        {focusMode ? (
           <>
+            <span className="focus-title" title={detail?.title || ""}>{detail?.title || "专注阅读"}</span>
+            <div className="spacer" />
+            <button className="btn small ghost focus-exit" onClick={exitFocus} title="退出专注（Esc）">✕ Esc</button>
+          </>
+        ) : (
+          <>
+            <button className="btn icon" onClick={() => setTopbarHidden((v) => !v)} title={topbarHidden ? "固定顶栏" : "隐藏顶栏（鼠标移到顶部可唤回）"}>
+              {topbarHidden ? "⤓" : "⤒"}
+            </button>
+            <button className="btn icon" onClick={() => setSidebarOpen((v) => !v)} title={sidebarOpen ? "收起资料库侧栏" : "展开资料库侧栏"}>
+              {sidebarOpen ? "«" : "»"}
+            </button>
+            <div className="brand">
+              <span className="logo">◈</span>
+              研报 AI 阅读助手<span className="sub">上传 PDF → AI 解析 → 可交互图表阅读</span>
+            </div>
+            <div className="spacer" />
+            <button className={"chip " + (ai.configured ? "ok" : "warn")} onClick={() => setShowSettings(true)} title="点击配置 AI 接口">
+              <span className="dot" />
+              {ai.configured ? `AI 就绪 · ${ai.model}` : "未配置 · 点我设置"}
+            </button>
+            <button className="btn icon" onClick={() => setTheme((t) => (t === "dark" ? "light" : "dark"))} title="切换深浅色">
+              {theme === "dark" ? "☀️" : "🌙"}
+            </button>
             <button className="btn" onClick={() => setShowSkills(true)}>🧩 Skills（{enabledSkills.length}/{skills.length}）</button>
             <button className="btn" onClick={() => setShowSettings(true)}>⚙️ 设置</button>
+            <button className="btn" onClick={toggleFocus} title="专注阅读：隐藏杂乱入口并放大阅读区">🧘 专注</button>
           </>
         )}
-        <button className={"btn" + (focusMode ? " primary" : "")} onClick={toggleFocus} title={focusMode ? "退出专注阅读（Esc）" : "专注阅读：隐藏杂乱入口，放大阅读区"}>
-          {focusMode ? "✕ 退出专注" : "🧘 专注"}
-        </button>
       </div>
 
       <div className="body">
@@ -256,7 +273,7 @@ export default function App() {
             </div>
           ) : tab === "pdf" ? (
             <div style={{ flex: 1, minHeight: 0 }}>
-              <PdfViewer docId={detail.id} pageCount={detail.page_count} jump={jump} />
+              <PdfViewer docId={detail.id} pageCount={detail.page_count} jump={jump} docTitle={detail.title} focusMode={focusMode} />
             </div>
           ) : tab === "history" ? (
             <div className="content">

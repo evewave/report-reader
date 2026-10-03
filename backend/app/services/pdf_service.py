@@ -68,6 +68,24 @@ def count_page_images(doc: fitz.Document) -> list[int]:
     return counts
 
 
+def text_layer(pdf_path: Path) -> list[dict[str, Any]]:
+    """逐页词框（归一化 0..1），供前端文本层实现「选中文本→高亮/批注」。"""
+    pages: list[dict[str, Any]] = []
+    with fitz.open(pdf_path) as doc:
+        for i, page in enumerate(doc):
+            W = page.rect.width or 1.0
+            H = page.rect.height or 1.0
+            words: list[list[Any]] = []
+            try:
+                for w in page.get_text("words"):
+                    x0, y0, x1, y1, t = w[0], w[1], w[2], w[3], w[4]
+                    words.append([round(x0 / W, 4), round(y0 / H, 4), round(x1 / W, 4), round(y1 / H, 4), t])
+            except Exception:  # noqa: BLE001
+                pass
+            pages.append({"page": i + 1, "words": words})
+    return pages
+
+
 def render_pages(doc: fitz.Document, out_dir: Path, dpi: int | None = None) -> int:
     """把每一页渲染成 PNG，供前端逐页阅读与视觉模型识别。返回页数。"""
     dpi = dpi or settings.RENDER_DPI

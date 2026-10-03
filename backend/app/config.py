@@ -17,10 +17,11 @@ DATA_DIR = BACKEND_DIR / "data"
 UPLOAD_DIR = DATA_DIR / "uploads"
 PAGES_DIR = DATA_DIR / "pages"                                 # 逐页渲染的 PNG
 EXPORT_DIR = DATA_DIR / "exports"                              # 导出的自包含 HTML
+ANNOTATED_DIR = DATA_DIR / "annotated"                         # 批注版 PDF（与原始分开）
 DB_PATH = DATA_DIR / "report-reader.db"
 SKILLS_DIR = BACKEND_DIR / "skills"                            # 可插拔 skill 根目录
 
-for _d in (DATA_DIR, UPLOAD_DIR, PAGES_DIR, EXPORT_DIR, SKILLS_DIR):
+for _d in (DATA_DIR, UPLOAD_DIR, PAGES_DIR, EXPORT_DIR, ANNOTATED_DIR, SKILLS_DIR):
     _d.mkdir(parents=True, exist_ok=True)
 
 

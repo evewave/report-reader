@@ -79,6 +79,18 @@ export function uploadDocument(file, onProgress) {
 
 export const pageImageUrl = (docId, page) => `${BASE}/documents/${docId}/pages/${page}.png`;
 export const pdfUrl = (docId) => `${BASE}/documents/${docId}/pdf`;
+export const annotatedPdfUrl = (docId) => `${BASE}/documents/${docId}/annotated/pdf`;
+
+// ---- PDF 批注 ----
+export const getAnnotations = (docId) => json(`/documents/${docId}/annotations`);
+export const getTextLayer = (docId) => json(`/documents/${docId}/textlayer`);
+export const saveAnnotations = (docId, items) =>
+  json(`/documents/${docId}/annotations`, {
+    method: "PUT",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({ items }),
+  });
+export const deleteAnnotations = (docId) => json(`/documents/${docId}/annotations`, { method: "DELETE" });
 
 // ---- 分析 ----
 export const analyze = (docId, skillId, useVision) =>

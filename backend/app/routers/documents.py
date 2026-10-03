@@ -6,17 +6,23 @@ import shutil
 import time
 import uuid
 from pathlib import Path
+from typing import Any
 
 from fastapi import APIRouter, File, HTTPException, UploadFile
 from fastapi.responses import FileResponse
+from pydantic import BaseModel
 
 from .. import database as db
 from ..config import PAGES_DIR, UPLOAD_DIR
-from ..services import pdf_service
+from ..services import annotation_service, pdf_service
 
 router = APIRouter(prefix="/api/documents", tags=["documents"])
 
 ALLOWED_SUFFIX = {".pdf"}
+
+
+class AnnotationsRequest(BaseModel):
+    items: list[dict[str, Any]] = []
 
 
 def _get_doc(doc_id: str) -> dict:
@@ -110,6 +116,18 @@ def get_pdf(doc_id: str) -> FileResponse:
     return FileResponse(p, media_type="application/pdf", filename=row["filename"])
 
 
+@router.get("/{doc_id}/textlayer")
+def get_textlayer(doc_id: str) -> dict[str, Any]:
+    row = _get_doc(doc_id)
+    p = Path(row["path"])
+    if not p.exists():
+        raise HTTPException(404, "原始 PDF 文件缺失")
+    try:
+        return {"pages": pdf_service.text_layer(p)}
+    except Exception as exc:  # noqa: BLE001
+        raise HTTPException(422, f"文本层生成失败：{pdf_service.__name__} {exc}") from exc
+
+
 @router.get("/{doc_id}/pages/{page_num}.png")
 def get_page_png(doc_id: str, page_num: int) -> FileResponse:
     _get_doc(doc_id)
@@ -119,12 +137,42 @@ def get_page_png(doc_id: str, page_num: int) -> FileResponse:
     return FileResponse(img, media_type="image/png")
 
 
+@router.get("/{doc_id}/annotations")
+def get_annotations(doc_id: str) -> dict[str, Any]:
+    _get_doc(doc_id)
+    return {"items": annotation_service.get_items(doc_id)}
+
+
+@router.put("/{doc_id}/annotations")
+def put_annotations(doc_id: str, body: AnnotationsRequest) -> dict[str, Any]:
+    _get_doc(doc_id)
+    return annotation_service.save_items(doc_id, body.items)
+
+
+@router.delete("/{doc_id}/annotations")
+def delete_annotations(doc_id: str) -> dict[str, Any]:
+    _get_doc(doc_id)
+    annotation_service.clear(doc_id)
+    return {"cleared": doc_id}
+
+
+@router.get("/{doc_id}/annotated/pdf")
+def get_annotated_pdf(doc_id: str) -> FileResponse:
+    row = _get_doc(doc_id)
+    p = annotation_service.annotated_path(doc_id)
+    if not p:
+        raise HTTPException(404, "尚无批注版（先添加批注并保存）")
+    name = Path(row["filename"]).stem + "-批注版.pdf"
+    return FileResponse(p, media_type="application/pdf", filename=name)
+
+
 @router.delete("/{doc_id}")
 def delete_document(doc_id: str) -> dict:
     _get_doc(doc_id)
     # 可恢复删除：移动到 data/.trash 而非永久删除
     trash = UPLOAD_DIR.parent / ".trash" / f"{int(time.time())}_{doc_id}"
     trash.mkdir(parents=True, exist_ok=True)
+    annotation_service.remove_doc_artifacts(doc_id, trash)
     for src in (UPLOAD_DIR / f"{doc_id}.pdf", UPLOAD_DIR / f"{doc_id}.json", PAGES_DIR / doc_id):
         if src.exists():
             shutil.move(str(src), str(trash / src.name))
